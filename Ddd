@@ -1,0 +1,22 @@
+## 1. Установка systemd-resolved (если не установлен)
+sudo apt update
+sudo apt install systemd-resolved
+## 2. Настройка /etc/systemd/resolved.conf
+Отредактируйте файл:
+sudo nano /etc/systemd/resolved.conf
+Добавьте или раскомментируйте следующие строки:
+[Resolve]
+DNS=1.1.1.1 1.0.0.1 2606:4700:4700::1111 2606:4700:4700::1001
+DNSOverTLS=yes
+DNSSEC=yes
+FallbackDNS=8.8.8.8 8.8.4.4 2001:4860:4860::8888 2001:4860:4860::8844
+## 3. Применение изменений
+sudo systemctl restart systemd-resolved
+sudo systemctl enable systemd-resolved
+## 4. Настройка системы для использования systemd-resolved
+sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+## 5. Проверка работы
+systemd-resolve --status
+dig google.com
+Проверка DoT:
+sudo tcpdump -i any -n port 853
